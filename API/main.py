@@ -5,6 +5,8 @@ import psycopg2
 
 app = Flask(__name__)
 CORS(app)
+
+
 # CORS(app, origins='http://localhost:8080')
 
 def set_db_connection():
@@ -15,47 +17,26 @@ def set_db_connection():
         password='alice')
     return conn
 
+
 conn = set_db_connection()
+# Open a cursor to perform database operations
 db = conn.cursor()
+
+
 # Database tables init
 # db.execute('DROP TABLE IF EXISTS measurements;')
-db.execute('CREATE TABLE IF NOT EXISTS measurements (id serial PRIMARY KEY,'
-           'temperature float NOT NULL,'
-           'humidity float NOT NULL,'
-           'date varchar(15) NOT NULL)')
-
-
-@app.route("/get_all_measures", methods=['GET'])
-def get_all_measures():
-    # Open a cursor to perform database operations
-    conn = set_db_connection()
-    db = conn.cursor()
-    db.execute('SELECT * FROM measurements;')
-    measurements = db.fetchall()
-    return measurements
-
-@app.route("/get_measure/<id>", methods=['GET'])
-def get_measure(id):
-    # Open a cursor to perform database operations
-    conn = set_db_connection()
-    db = conn.cursor()
-    sql = "SELECT * FROM measurements where id = %s;" % (str(id))
-    db.execute(sql)
-    measure_data = db.fetchall()
-    return measure_data
 
 @app.route("/get_all_sensors", methods=['GET'])
 def get_all_sensors():
-    # Open a cursor to perform database operations
     conn = set_db_connection()
     db = conn.cursor()
     db.execute('SELECT * FROM sensors;')
     sensors = db.fetchall()
     return sensors
 
+
 @app.route("/get_sensor/<id>", methods=['GET'])
 def get_sensor(id):
-    # Open a cursor to perform database operations
     conn = set_db_connection()
     db = conn.cursor()
     sql = "SELECT * FROM sensors where id = %s;" % (str(id))
@@ -85,6 +66,7 @@ def create_sensor():
     conn.commit()
     return {'message': 'sensor added'}, 200
 
+
 @app.route("/update_sensor/<id>", methods=['PUT'])
 def update_sensor(id):
     data = request.get_json()
@@ -105,6 +87,25 @@ def update_sensor(id):
                 ))
     conn.commit()
     return {'message': 'sensor added'}, 200
+
+
+@app.route("/get_all_measures", methods=['GET'])
+def get_all_measures():
+    conn = set_db_connection()
+    db = conn.cursor()
+    db.execute('SELECT * FROM measurements;')
+    measurements = db.fetchall()
+    return measurements
+
+
+@app.route("/get_sensor_measure/<sensor_id>", methods=['GET'])
+def get_sensor_measure(sensor_id):
+    conn = set_db_connection()
+    db = conn.cursor()
+    sql = "SELECT * FROM measurements where sensor_id = %s;" % (str(sensor_id))
+    db.execute(sql)
+    measure_data = db.fetchall()
+    return measure_data
 
 
 @app.route("/measure", methods=['POST'])
@@ -130,9 +131,6 @@ def create_measurements():
                 date))
     conn.commit()
     return {'message': 'measurements added' + date}, 200
-
-
-
 
 # db.close()
 # conn.close()
