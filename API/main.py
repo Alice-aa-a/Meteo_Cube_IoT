@@ -118,11 +118,13 @@ def create_measurements():
     db.execute('CREATE TABLE IF NOT EXISTS measurements (id serial PRIMARY KEY,'
                'temperature float NOT NULL,'
                'humidity float NOT NULL,'
-               'date varchar(50) NOT NULL,'
+               'date timestamp NOT NULL,'
                'sensor_id integer REFERENCES sensors (id))'
                )
 
-    date = datetime.today().strftime("%m/%d/%Y - %H:%M")
+    # date = datetime.today().strftime("%m/%d/%Y - %H:%M")
+    date = datetime.today()
+
     db.execute('INSERT INTO measurements (temperature, humidity, sensor_id, date)'
                'VALUES (%s, %s, %s, %s)',
                (data['temperature'],
@@ -130,7 +132,7 @@ def create_measurements():
                 data['sensor_id'],
                 date))
     conn.commit()
-    return {'message': 'measurements added' + date}, 200
+    return {'message': 'measurements added' + date.strftime("%m/%d/%Y - %H:%M")}, 200
 
 # db.close()
 # conn.close()

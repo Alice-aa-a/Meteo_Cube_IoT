@@ -20,7 +20,12 @@ async function getChartValues() {
     const y_hum_Values = [];
 
     for (let i = 0; i < measurements.length; i++) {
-        xValues.push(measurements[i][3]);
+        date = new Date(measurements[i][3])
+        date = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+        var options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric',
+        };
+        date = date.toLocaleDateString('fr-FR', options);
+        xValues.push(date);
         y_temp_Values.push(measurements[i][1]);
         y_hum_Values.push(measurements[i][2]);
     }
@@ -92,7 +97,6 @@ async function getMeasuresResponseBySensor(sensor_id) {
     try {
         api = "http://127.0.0.1:5000/get_sensor_measure/%s" % (sensor_id)
 
-        console.log(api);
         const response = await fetch(api);
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -122,7 +126,7 @@ async function getChartValuesBySensor() {
 //        'sensor': getMeasuresResponseBySensor(sensor_id),
         })
     }
-    console.log(data);
+//    console.log(data);
 
 
 //    const measurements = await getMeasuresResponseBySensor();
