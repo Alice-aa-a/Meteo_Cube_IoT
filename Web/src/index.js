@@ -77,6 +77,7 @@ async function getSensorsResponse() {
             throw error;
         }
     }
+
 async function getSensorTableValues() {
 
     const sensors = await getSensorsResponse();
@@ -110,21 +111,6 @@ async function getMeasuresResponseBySensor(sensor_id) {
         }
     }
 
-
-async function getMeasuresResponse() {
-    try {
-        const response = await fetch('http://127.0.0.1:5000/get_all_measures');
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const sensors = await response.json();
-        return sensors;
-        }
-        catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
-    }
 async function getMeasureTableValues() {
 
     const measures = await getMeasuresResponse();
