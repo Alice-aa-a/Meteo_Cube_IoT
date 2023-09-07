@@ -20,14 +20,14 @@ async function getChartValues() {
     const y_hum_Values = [];
 
     for (let i = 0; i < measurements.length; i++) {
-        date = new Date(measurements[i][3])
+        date = new Date(measurements[i]['date'])
         date = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
         var options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric',
         };
         date = date.toLocaleDateString('fr-FR', options);
         xValues.push(date);
-        y_temp_Values.push(measurements[i][1]);
-        y_hum_Values.push(measurements[i][2]);
+        y_temp_Values.push(measurements[i]['temperature']);
+        y_hum_Values.push(measurements[i]['humidity']);
     }
 
     new Chart("myChart", {
@@ -111,37 +111,43 @@ async function getMeasuresResponseBySensor(sensor_id) {
     }
 
 
-async function getChartValuesBySensor() {
-
-    const sensors = await getSensorsResponse();
-    console.log(sensors);
-    data = []
-    for (let i = 0; i < sensors.length; i++) {
-        sensor_id = sensors[i][0]
-        console.log(sensor_id);
-//        const measures = await getMeasuresResponseBySensor(sensor_id);
-//        console.log(measures);
-        data.push({
-        'sensor':sensors[i][0],
-//        'sensor': getMeasuresResponseBySensor(sensor_id),
-        })
+async function getMeasuresResponse() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/get_all_measures');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const sensors = await response.json();
+        return sensors;
+        }
+        catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
     }
-//    console.log(data);
+async function getMeasureTableValues() {
 
+    const measures = await getMeasuresResponse();
 
-//    const measurements = await getMeasuresResponseBySensor();
-//    const xValues = [];
-//    const y_temp_Values = [];
-//    const y_hum_Values = [];
-//
-//
-//    for (let i = 0; i < measurements.length; i++) {
-//        xValues.push(measurements[i][3]);
-//        y_temp_Values.push(measurements[i][1]);
-//        y_hum_Values.push(measurements[i][2]);
-//    }
+    var table = document.getElementById("measures_table");
+        table.innerHTML += "<tr><th>Id</th><th>Température (°C)</th><th>Humidity</th><th>Date</th><th>ID Sonde</th></tr>"
+    console.log(measures);
+    for (let i = 0; i < measures.length; i++) {
 
+        date = new Date(measures[i]['date'])
+        date = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+        var options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric',
+        };
+        date = date.toLocaleDateString('fr-FR', options);
+        table.innerHTML += '<tr><td>' +
+        measures[i]['id'].toString() + '</td><td>'+
+        measures[i]['temperature'].toString() + '</td><td>'+
+        measures[i]['humidity'].toString() + '</td><td>'+
+        date.toString() + '</td><td>'+
+        measures[i]['sensor_id'].toString() + '</td></tr>'
+    }
 }
+
 getChartValues();
 getSensorTableValues();
-getChartValuesBySensor();
+getMeasureTableValues();

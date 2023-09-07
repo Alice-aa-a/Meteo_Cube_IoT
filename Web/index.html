@@ -19,27 +19,27 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="sensor.html">Home</a>
-                </li>
-            </ul>
-        </div>
     </div>
 </nav>
 
 <H1 class="m-5 text-center">Mesures</H1>
 
-
 <div class="m-5 d-flex justify-content-center">
     <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
 </div>
 
-<div class="m-5">
-    <H3 class="m-5 text-center">Sondes</H3>
-    <table class="table text-center" id="sensor_table"/>
+<div class="text-center">
+    <div class="m-5">
+        <h3 class="m-5 text-center">Sondes</h3>
+        <table class="table text-center" id="sensor_table"></table>
+    </div>
+
+    <div class="m-5">
+        <h3 class="m-5 text-center">Détail des mesures</h3>
+        <table class="table text-center" id="measures_table"></table>
+    </div>
 </div>
+
 
 <script type="text/javascript" src="src/index.js"></script>
 </body>
