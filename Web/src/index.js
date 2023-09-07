@@ -130,7 +130,7 @@ async function getMeasureTableValues() {
     const measures = await getMeasuresResponse();
 
     var table = document.getElementById("measures_table");
-        table.innerHTML += "<tr><th>Id</th><th>Température (°C)</th><th>Humidity</th><th>Date</th><th>ID Sonde</th></tr>"
+        table.innerHTML += "<tr><th>Id</th><th>Température (°C)</th><th>Humidité</th><th>Date</th><th>ID Sonde</th></tr>"
     for (let i = 0; i < measures.length; i++) {
 
         date = new Date(measures[i]['date'])
