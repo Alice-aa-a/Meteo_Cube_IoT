@@ -31,7 +31,7 @@ class Sensor(Resource):
     def get(self):
         conn = set_db_connection()
         db = conn.cursor()
-        db.execute('SELECT * FROM sensors;')
+        db.execute('SELECT * FROM sensors ORDER BY id;')
         sensors = db.fetchall()
         return sensors
 
@@ -41,7 +41,7 @@ class Sensor(Resource):
     def get(self, id):
         conn = set_db_connection()
         db = conn.cursor()
-        sql = "SELECT * FROM sensors where id = %s;" % (str(id))
+        sql = "SELECT * FROM sensors where id = %s ORDER BY id;" % (str(id))
         db.execute(sql)
         sensor_data = db.fetchall()
         return sensor_data
@@ -101,7 +101,7 @@ class Measure(Resource):
     def get(self):
         conn = set_db_connection()
         db = conn.cursor()
-        db.execute('SELECT * FROM measurements;')
+        db.execute('SELECT * FROM measurements ORDER BY id;')
         measurements = db.fetchall()
         res = []
         for measurement in measurements:
@@ -121,7 +121,7 @@ class Measure(Resource):
     def get(self, sensor_id):
         conn = set_db_connection()
         db = conn.cursor()
-        sql = "SELECT * FROM measurements where sensor_id = %s;" % (str(sensor_id))
+        sql = "SELECT * FROM measurements where sensor_id = %s ORDER BY id;" % (str(sensor_id))
         db.execute(sql)
         measure_data = db.fetchall()
         res = []
