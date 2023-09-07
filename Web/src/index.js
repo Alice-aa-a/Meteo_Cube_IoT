@@ -131,7 +131,6 @@ async function getMeasureTableValues() {
 
     var table = document.getElementById("measures_table");
         table.innerHTML += "<tr><th>Id</th><th>Température (°C)</th><th>Humidity</th><th>Date</th><th>ID Sonde</th></tr>"
-    console.log(measures);
     for (let i = 0; i < measures.length; i++) {
 
         date = new Date(measures[i]['date'])
@@ -139,8 +138,16 @@ async function getMeasureTableValues() {
         var options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric',
         };
         date = date.toLocaleDateString('fr-FR', options);
+        temp_value = measures[i]['temperature']
+        str = '<td>'
+        if (temp_value > 19) {
+            str = "<td class='text-bg-danger'>"
+        }
+        if (temp_value < 5) {
+            str = "<td class='text-bg-primary'>"
+        }
         table.innerHTML += '<tr><td>' +
-        measures[i]['id'].toString() + '</td><td>'+
+        measures[i]['id'].toString() + '</td>'+ str +
         measures[i]['temperature'].toString() + '</td><td>'+
         measures[i]['humidity'].toString() + '</td><td>'+
         date.toString() + '</td><td>'+
