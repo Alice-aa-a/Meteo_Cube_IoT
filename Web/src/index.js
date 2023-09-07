@@ -82,7 +82,7 @@ async function getSensorTableValues() {
     const sensors = await getSensorsResponse();
 
     var table = document.getElementById("sensor_table");
-        table.innerHTML += "<tr><th>Id</th><th>Sonde</th><th>Latitude</th><th>Longitude</th></tr>"
+        table.innerHTML += "<tr><th>Id</th><th>Sonde</th><th>Latitude (°)</th><th>Longitude (°)</th></tr>"
 
     for (let i = 0; i < sensors.length; i++) {
         table.innerHTML += '<tr><td>' +
